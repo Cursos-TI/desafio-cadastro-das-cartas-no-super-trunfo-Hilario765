@@ -1,94 +1,114 @@
-# Desafio Super Trunfo - Países - Cadastro das Cartas
+#include <stdio.h>
 
-Bem-vindo ao desafio "Super Trunfo - Países"! No jogo Super Trunfo, os jogadores comparam os atributos das cartas para determinar a mais forte. O tema deste Super Trunfo é "Países", onde você comparará os atributos das cidades.
+// Define uma estrutura para representar uma carta do Super Trunfo
+typedef struct {
+    char estado;            // Estado da carta (A-H)
+    char codigo[5];         // Código da carta (ex: A01)
+    char nomeCidade[50];    // Nome da cidade
+    int populacao;          // Número de habitantes
+    float area;             // Área da cidade em km²
+    float pib;              // Produto Interno Bruto
+    int pontosTuristicos;   // Número de pontos turísticos
+} CartaSuperTrunfo;
 
-A empresa MateCheck contratou você para desenvolver a parte inicial do jogo, que consiste no cadastro das cartas.
+int main() {
+    // Declara duas variáveis do tipo CartaSuperTrunfo
+    CartaSuperTrunfo carta1, carta2;
 
-O desafio está dividido em três níveis: Novato, Aventureiro e Mestre, com cada nível adicionando mais complexidade ao anterior.  **Você deve escolher qual desafio quer realizar.**
+    // --- Cadastro da Carta 1 ---
+    printf("--- Cadastro da Carta 1 ---\n");
 
-🚨 **Atenção:** O nível Novato do desafio é focado apenas no cadastro das cartas, utilizando as funções `scanf` para ler os dados e `printf` para exibi-los.
+    printf("Digite o Estado (A-H): ");
+    scanf(" %c", &carta1.estado); // O espaço antes de %c ignora espaços em branco pendentes
 
-## 🎮 Nível Novato: Cadastro Básico
+    printf("Digite o Código da Carta (ex: A01): ");
+    scanf("%s", carta1.codigo); // Lê o código da carta como string
 
-No nível Novato, você iniciará criando o sistema básico do jogo Super Trunfo com o tema "Países". As cartas serão divididas por estados, cada um com quatro cidades.  Imagine um país dividido em oito estados (A a H), e cada estado com quatro cidades (1 a 4).  A combinação forma o código da carta (ex: A01, B02).
+    printf("Digite o Nome da Cidade: ");
+    // Usa getchar() para limpar o buffer e depois scanf para ler o nome da cidade com espaços
+    while (getchar() != '\n'); // Limpa o buffer de entrada
+    fgets(carta1.nomeCidade, sizeof(carta1.nomeCidade), stdin);
+    // Remove o caractere de nova linha que fgets pode adicionar
+    for (int i = 0; carta1.nomeCidade[i] != '\0'; i++) {
+        if (carta1.nomeCidade[i] == '\n') {
+            carta1.nomeCidade[i] = '\0';
+            break;
+        }
+    }
 
-🚩 **Objetivo:** Criar um programa em C que cadastra **duas** cartas com os seguintes atributos:
+    printf("Digite a População: ");
+    scanf("%d", &carta1.populacao);
 
-*   População (`int`)
-*   Área (`float`)
-*   PIB (`float`)
-*   Número de pontos turísticos (`int`)
+    printf("Digite a Área (em km²): ");
+    scanf("%f", &carta1.area);
 
-⚙️ **Funcionalidades do Sistema:**
+    printf("Digite o PIB (em bilhões de reais): ");
+    scanf("%f", &carta1.pib);
 
-*   O sistema permitirá ao usuário cadastrar os dados de **duas** cartas manualmente via terminal.
-*   Após o cadastro, o sistema exibirá os dados de cada cidade de forma organizada.
+    printf("Digite o Número de Pontos Turísticos: ");
+    scanf("%d", &carta1.pontosTuristicos);
 
-📥 **Entrada** e 📤 **Saída de Dados:**
+    // --- Limpeza do buffer para a próxima leitura ---
+    while (getchar() != '\n');
 
-*   O usuário insere os dados de cada carta interativamente via `scanf`.
-*   O programa exibe os dados cadastrados usando `printf`, com cada atributo em uma nova linha.
+    printf("\n"); // Linha em branco para separar as seções
 
-**Simplificações para o Nível Novato:**
+    // --- Cadastro da Carta 2 ---
+    printf("--- Cadastro da Carta 2 ---\n");
 
-*   Cadastre apenas **duas** cartas.
-*   Concentre-se na leitura, armazenamento e exibição. Não implemente comparações ou outros recursos.
-*   **Não use** laços (`for`, `while`) ou condicionais (`if`, `else`).
+    printf("Digite o Estado (A-H): ");
+    scanf(" %c", &carta2.estado);
 
+    printf("Digite o Código da Carta (ex: A01): ");
+    scanf("%s", carta2.codigo);
 
-## 🛡️ Nível Aventureiro: Cálculo de Atributos
+    printf("Digite o Nome da Cidade: ");
+    while (getchar() != '\n'); // Limpa o buffer de entrada
+    fgets(carta2.nomeCidade, sizeof(carta2.nomeCidade), stdin);
+    // Remove o caractere de nova linha que fgets pode adicionar
+    for (int i = 0; carta2.nomeCidade[i] != '\0'; i++) {
+        if (carta2.nomeCidade[i] == '\n') {
+            carta2.nomeCidade[i] = '\0';
+            break;
+        }
+    }
 
-No nível Aventureiro, você expandirá o sistema para incluir o cálculo de dois novos atributos: Densidade Populacional e PIB per Capita.
+    printf("Digite a População: ");
+    scanf("%d", &carta2.populacao);
 
-🆕 **Diferença em relação ao Nível Novato:**
+    printf("Digite a Área (em km²): ");
+    scanf("%f", &carta2.area);
 
-*   **Novos Atributos:**
-    *   Densidade Populacional: População / Área (`float`)
-    *   PIB per Capita: PIB / População (`float`)
+    printf("Digite o PIB (em bilhões de reais): ");
+    scanf("%f", &carta2.pib);
 
-⚙️ **Funcionalidades do Sistema:**
+    printf("Digite o Número de Pontos Turísticos: ");
+    scanf("%d", &carta2.pontosTuristicos);
 
-*   O sistema calculará automaticamente a Densidade Populacional e o PIB per Capita.
-*   Os novos atributos serão exibidos junto com os demais.
+    // --- Exibição das Informações ---
+    printf("\n\n=== Informações Cadastradas ===\n\n");
 
-📥 **Entrada** e 📤 **Saída de Dados:**
+    // Exibe informações da Carta 1
+    printf("Carta 1:\n");
+    printf("Estado: %c\n", carta1.estado);
+    printf("Código: %s\n", carta1.codigo);
+    printf("Nome da Cidade: %s\n", carta1.nomeCidade);
+    printf("População: %d\n", carta1.populacao);
+    printf("Área: %.2f km²\n", carta1.area); // Formata a área com 2 casas decimais
+    printf("PIB: %.2f bilhões de reais\n", carta1.pib); // Formata o PIB com 2 casas decimais
+    printf("Número de Pontos Turísticos: %d\n", carta1.pontosTuristicos);
 
-*   Mesma entrada do nível Novato.
-*   A saída exibirá também os atributos calculados.
+    printf("\n"); // Linha em branco para separar as cartas
 
-**Simplificações para o Nível Intermediário:**
+    // Exibe informações da Carta 2
+    printf("Carta 2:\n");
+    printf("Estado: %c\n", carta2.estado);
+    printf("Código: %s\n", carta2.codigo);
+    printf("Nome da Cidade: %s\n", carta2.nomeCidade);
+    printf("População: %d\n", carta2.populacao);
+    printf("Área: %.2f km²\n", carta2.area);
+    printf("PIB: %.2f bilhões de reais\n", carta2.pib);
+    printf("Número de Pontos Turísticos: %d\n", carta2.pontosTuristicos);
 
-*   Continue cadastrando apenas **duas** cartas.
-*   Continue **sem usar** laços (`for`, `while`) ou condicionais (`if`, `else`).
-
-
-
-## 🏆 Nível Mestre: Comparação e Super Poder
-
-No nível Mestre, você implementará a comparação entre duas cartas e o cálculo do "Super Poder".
-
-🆕 **Diferença em relação ao Nível Aventureiro:**
-
-*   **Comparação de Cartas:** O usuário poderá comparar as duas cartas.
-*   **Super Poder:** Soma de todos os atributos (inclusive os calculados), com a densidade populacional *invertida* antes da soma (1/densidade).  Tipo: `float`.
-
-⚙️ **Funcionalidades do Sistema:**
-
-*   Comparação atributo a atributo, mostrando qual carta venceu (1 se a Carta 1 vence, 0 se a Carta 2 vence).
-*   Para Densidade Populacional, vence a carta com o *menor* valor.
-*   Para os demais atributos (e o Super Poder), vence a carta com o *maior* valor.
-
-📥 **Entrada** e 📤 **Saída de Dados:**
-
-*   Mesma entrada dos níveis anteriores, mas a População agora é `unsigned long int`.
-*   A saída mostrará o resultado da comparação para cada atributo e o Super Poder.
-
-**Observação:**  Preste atenção à conversão de tipos ao calcular o Super Poder!
-
-
-## 🏁 Conclusão
-
-Ao concluir qualquer um dos níveis, você terá dado um passo importante no desenvolvimento do Super Trunfo - Países. Boa sorte e divirta-se programando!
-
-Equipe de Ensino - MateCheck
-content_copy
+    return 0; // Indica que o programa foi executado com sucesso
+}
