@@ -1,0 +1,238 @@
+#include <stdio.h>
+#include <string.h>
+
+// Define uma estrutura para representar uma carta do Super Trunfo
+typedef struct {
+    char estado[3];         // Estado da carta (ex: "SP") - alterado para string para melhor representação
+    char codigo[5];         // Código da carta (ex: A01)
+    char nomeCidade[50];    // Nome da cidade
+    int populacao;          // Número de habitantes
+    float area;             // Área da cidade em km²
+    float pib;              // Produto Interno Bruto em bilhões de reais
+    int pontosTuristicos;   // Número de pontos turísticos
+    float densidadePopulacional; // Densidade populacional (calculado)
+    float pibPerCapita;     // PIB per capita (calculado)
+} CartaSuperTrunfo;
+
+// Função para calcular e preencher os atributos calculados da carta
+void calcularAtributos(CartaSuperTrunfo *carta) {
+    if (carta->area > 0) {
+        carta->densidadePopulacional = (float)carta->populacao / carta->area;
+    } else {
+        carta->densidadePopulacional = 0.0; // Evita divisão por zero
+    }
+
+    if (carta->populacao > 0) {
+        // O PIB está em bilhões, então multiplicamos por 1.000.000.000 para obter o valor total
+        carta->pibPerCapita = ((carta->pib) * 1000000000.0) / carta->populacao;
+    } else {
+        carta->pibPerCapita = 0.0; // Evita divisão por zero
+    }
+}
+
+// Função para exibir as informações de uma carta
+void exibirCarta(const CartaSuperTrunfo *carta, int numeroCarta) {
+    printf("--- Carta %d ---\n", numeroCarta);
+    printf("Estado: %s\n", carta->estado);
+    printf("Código: %s\n", carta->codigo);
+    printf("Nome da Cidade: %s\n", carta->nomeCidade);
+    printf("População: %d habitantes\n", carta->populacao);
+    printf("Área: %.2f km²\n", carta->area);
+    printf("PIB: R$ %.2f bilhões\n", carta->pib);
+    printf("Pontos Turísticos: %d\n", carta->pontosTuristicos);
+    printf("Densidade Populacional: %.2f hab/km²\n", carta->densidadePopulacional);
+    printf("PIB per capita: R$ %.2f\n", carta->pibPerCapita);
+    printf("\n");
+}
+
+// Função para comparar duas cartas e determinar a vencedora
+void compararCartas(const CartaSuperTrunfo *carta1, const CartaSuperTrunfo *carta2, const char *atributo) {
+    printf("--- Comparação de Cartas ---\n");
+    printf("Atributo em Comparação: %s\n\n", atributo);
+
+    // Determina qual carta vence com base no atributo escolhido
+    const CartaSuperTrunfo *vencedora = NULL;
+    const CartaSuperTrunfo *perdedora = NULL;
+    char nomeVencedora[50], nomePerdedora[50];
+
+    // Copia os nomes das cidades para usar nas mensagens de resultado
+    strcpy(nomeVencedora, carta1->nomeCidade);
+    strcpy(nomePerdedora, carta2->nomeCidade);
+
+    // Remove quebras de linha dos nomes das cidades, se houver
+    nomeVencedora[strcspn(nomeVencedora, "\n")] = 0;
+    nomePerdedora[strcspn(nomePerdedora, "\n")] = 0;
+
+    // Lógica de comparação para cada atributo possível
+    if (strcmp(atributo, "População") == 0) {
+        printf("Carta 1 (%s): %d\n", nomeVencedora, carta1->populacao);
+        printf("Carta 2 (%s): %d\n", nomePerdedora, carta2->populacao);
+        if (carta1->populacao > carta2->populacao) {
+            vencedora = carta1;
+            perdedora = carta2;
+        } else if (carta2->populacao > carta1->populacao) {
+            vencedora = carta2;
+            perdedora = carta1;
+        } else {
+            printf("\nResultado: Empate!\n");
+            return;
+        }
+    } else if (strcmp(atributo, "Área") == 0) {
+        printf("Carta 1 (%s): %.2f km²\n", nomeVencedora, carta1->area);
+        printf("Carta 2 (%s): %.2f km²\n", nomePerdedora, carta2->area);
+        if (carta1->area > carta2->area) {
+            vencedora = carta1;
+            perdedora = carta2;
+        } else if (carta2->area > carta1->area) {
+            vencedora = carta2;
+            perdedora = carta1;
+        } else {
+            printf("\nResultado: Empate!\n");
+            return;
+        }
+    } else if (strcmp(atributo, "PIB") == 0) {
+        printf("Carta 1 (%s): R$ %.2f bilhões\n", nomeVencedora, carta1->pib);
+        printf("Carta 2 (%s): R$ %.2f bilhões\n", nomePerdedora, carta2->pib);
+        if (carta1->pib > carta2->pib) {
+            vencedora = carta1;
+            perdedora = carta2;
+        } else if (carta2->pib > carta1->pib) {
+            vencedora = carta2;
+            perdedora = carta1;
+        } else {
+            printf("\nResultado: Empate!\n");
+            return;
+        }
+    } else if (strcmp(atributo, "Densidade Populacional") == 0) {
+        printf("Carta 1 (%s): %.2f hab/km²\n", nomeVencedora, carta1->densidadePopulacional);
+        printf("Carta 2 (%s): %.2f hab/km²\n", nomePerdedora, carta2->densidadePopulacional);
+        // Para densidade populacional, o menor valor vence
+        if (carta1->densidadePopulacional < carta2->densidadePopulacional) {
+            vencedora = carta1;
+            perdedora = carta2;
+        } else if (carta2->densidadePopulacional < carta1->densidadePopulacional) {
+            vencedora = carta2;
+            perdedora = carta1;
+        } else {
+            printf("\nResultado: Empate!\n");
+            return;
+        }
+    } else if (strcmp(atributo, "PIB per capita") == 0) {
+        printf("Carta 1 (%s): R$ %.2f\n", nomeVencedora, carta1->pibPerCapita);
+        printf("Carta 2 (%s): R$ %.2f\n", nomePerdedora, carta2->pibPerCapita);
+        if (carta1->pibPerCapita > carta2->pibPerCapita) {
+            vencedora = carta1;
+            perdedora = carta2;
+        } else if (carta2->pibPerCapita > carta1->pibPerCapita) {
+            vencedora = carta2;
+            perdedora = carta1;
+        } else {
+            printf("\nResultado: Empate!\n");
+            return;
+        }
+    } else {
+        printf("Atributo de comparação inválido.\n");
+        return;
+    }
+
+    // Exibe o resultado da comparação
+    if (vencedora != NULL) {
+        // Novamente, remove a quebra de linha para a mensagem final
+        char nomeVencedoraFinal[50], nomePerdedoraFinal[50];
+        strcpy(nomeVencedoraFinal, vencedora->nomeCidade);
+        strcpy(nomePerdedoraFinal, perdedora->nomeCidade);
+        nomeVencedoraFinal[strcspn(nomeVencedoraFinal, "\n")] = 0;
+        nomePerdedoraFinal[strcspn(nomePerdedoraFinal, "\n")] = 0;
+
+        printf("\nResultado: Carta %d (%s) venceu!\n",
+               (vencedora == carta1) ? 1 : 2,
+               (vencedora == carta1) ? nomeVencedoraFinal : nomePerdedoraFinal);
+    }
+}
+
+int main() {
+    // Declara duas variáveis do tipo CartaSuperTrunfo
+    CartaSuperTrunfo carta1, carta2;
+
+    // --- Cadastro da Carta 1 ---
+    printf("--- Cadastro da Carta 1 ---\n");
+
+    printf("Digite o Estado (ex: SP): ");
+    scanf("%s", carta1.estado);
+
+    printf("Digite o Código da Carta (ex: A01): ");
+    scanf("%s", carta1.codigo);
+
+    printf("Digite o Nome da Cidade: ");
+    // Limpa o buffer de entrada antes de ler o nome da cidade para evitar problemas com scanf anterior
+    while (getchar() != '\n');
+    fgets(carta1.nomeCidade, sizeof(carta1.nomeCidade), stdin);
+    // Remove o caractere de nova linha que fgets pode adicionar
+    carta1.nomeCidade[strcspn(carta1.nomeCidade, "\n")] = 0;
+
+    printf("Digite a População: ");
+    scanf("%d", &carta1.populacao);
+
+    printf("Digite a Área (em km²): ");
+    scanf("%f", &carta1.area);
+
+    printf("Digite o PIB (em bilhões de reais): ");
+    scanf("%f", &carta1.pib);
+
+    printf("Digite o Número de Pontos Turísticos: ");
+    scanf("%d", &carta1.pontosTuristicos);
+
+    // Limpa o buffer para a próxima leitura após o último scanf numérico
+    while (getchar() != '\n');
+
+    printf("\n"); // Linha em branco para separar as seções
+
+    // --- Cadastro da Carta 2 ---
+    printf("--- Cadastro da Carta 2 ---\n");
+
+    printf("Digite o Estado (ex: RJ): ");
+    scanf("%s", carta2.estado);
+
+    printf("Digite o Código da Carta (ex: B02): ");
+    scanf("%s", carta2.codigo);
+
+    printf("Digite o Nome da Cidade: ");
+    while (getchar() != '\n'); // Limpa o buffer de entrada
+    fgets(carta2.nomeCidade, sizeof(carta2.nomeCidade), stdin);
+    // Remove o caractere de nova linha que fgets pode adicionar
+    carta2.nomeCidade[strcspn(carta2.nomeCidade, "\n")] = 0;
+
+    printf("Digite a População: ");
+    scanf("%d", &carta2.populacao);
+
+    printf("Digite a Área (em km²): ");
+    scanf("%f", &carta2.area);
+
+    printf("Digite o PIB (em bilhões de reais): ");
+    scanf("%f", &carta2.pib);
+
+    printf("Digite o Número de Pontos Turísticos: ");
+    scanf("%d", &carta2.pontosTuristicos);
+
+    // Limpa o buffer após o último scanf numérico
+    while (getchar() != '\n');
+
+    // --- Cálculos ---
+    calcularAtributos(&carta1);
+    calcularAtributos(&carta2);
+
+    // --- Exibição das Informações ---
+    printf("\n\n=== Informações Cadastradas ===\n\n");
+    exibirCarta(&carta1, 1);
+    exibirCarta(&carta2, 2);
+
+    // --- Comparação de Atributo ---
+    // A escolha do atributo de comparação é feita diretamente aqui no código.
+    // Você pode alterar a string abaixo para comparar outros atributos numéricos.
+    // Opções: "População", "Área", "PIB", "Densidade Populacional", "PIB per capita"
+    char atributoParaComparar[] = "População"; // Exemplo: Comparando População
+
+    compararCartas(&carta1, &carta2, atributoParaComparar);
+
+    return 0; // Indica que o programa foi executado com sucesso
+}
